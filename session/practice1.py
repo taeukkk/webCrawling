@@ -1,6 +1,8 @@
-import requests
-from bs4 import BeautifulSoup
 import re
+import requests
+import pandas as pd
+import numpy as np
+from bs4 import BeautifulSoup
     
 headers = {
 # 'Host': 'www.opinet.co.kr',
@@ -78,3 +80,14 @@ for area in areas:
     
 for os in oil_station:
     print(os)
+
+df = pd.DataFrame(oil_station)
+# print(df)
+df['유가'] = df['유가'].astype('int')
+# print(df['유가'].isnull().sum())
+# print(df[df['유가']==0])
+
+print(df.groupby('셀프주유소여부').min('유가'))
+print(df.groupby('지역').min('유가'))
+print(df.sort_values(by="유가").head(5)) #저렴한 순서
+print(df.sort_values(by="유가",ascending=False).head(5)) #비싼 순서
